@@ -2,7 +2,7 @@
 
 ## A C++/SFML platformer matching game
 
-<img width="1728" alt="hopsImg" src="https://github.com/user-attachments/assets/46bc6057-871a-48d5-9eea-e3cbb26ad683">
+<img width="1436" alt="hopsImg" src="https://github.com/user-attachments/assets/feb53879-c0f7-497c-9d79-404c8eea09e0">
 
 ### ABOUT THE PROJECT
 
