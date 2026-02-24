@@ -1,8 +1,8 @@
-# Hop, Scotch!
+# Hopscotch
 
 ## C++/SFML platformer matching game
 
-[IMAGE HERE]
+<img width="1728" height="1117" alt="Screenshot 2026-02-23 at 10 01 15 PM" src="https://github.com/user-attachments/assets/3b27ce3c-a161-42a6-bb7e-54b191ac2f94" />
 
 ### CODE REVIEWER NOTE!!
 This codebase is some of my earliest work and to look back on it now, I note much that I would... but not time at the moment... submit as is.  fudged it full speed ahead if it would work
