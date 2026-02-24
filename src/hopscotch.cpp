@@ -10,7 +10,6 @@
 #include "sfmlApp.hpp"
 
 
-
 void State::loadMap (string fname)
 {
 	platforms.clear();
@@ -20,7 +19,7 @@ void State::loadMap (string fname)
     stumps.reserve(100);
 	mapItems.reserve(100);
 	std::ifstream plats;
-	plats.open("levels/" + fname);
+	plats.open(Resources::executingDir() / "resources" / "levels" / fname);
 	if (!plats.is_open()) {
 		cout << "Map file didn't load. \n";
 		return;
@@ -148,24 +147,21 @@ void State::loadMap (string fname)
 	plats.close();
 }
 
-void State::loadTextures () {
-	
+void State::loadTextures ()
+{
 	matchTexs.clear();
 	matchTexPtrs.clear();
 	gameWorldTexs.clear();
 	matchTexs.reserve(40);
 	gameWorldTexs.reserve(40);
-
 	txMap.clear();
 	
 	Texture tex;
-	string basePath = "resources/";
+	string basePath = (Resources::executingDir() / "resources" / "images" / "").string();
 	
 	forNum (int(txList.size())) {
 		string fileName = txList[i].first;
 		string filePath = basePath + fileName;
-		//TODO: make embedded info for new sprites
-		//		if (!loadByMethod(tex, filePath))
 		if (!tex.loadFromFile(filePath))
 			cerr << "Couldn't load texture " << filePath << endl;
 		else {
@@ -177,49 +173,46 @@ void State::loadTextures () {
 	int sz = int(gameWorldTexList.size());
 	for (int i = 0; i <  sz ; ++i) {
 		string fileName = basePath + gameWorldTexList[i];
-		loadByMethod(tex, fileName);
+		tex.loadFromFile(fileName);
 		gameWorldTexs.push_back(tex);
 	}
 	
-	basePath = "resources/matchPics/";
+	basePath = (Resources::executingDir() / "resources" / "images" / "matchPics" / "").string();
 	sz = int(matchTexList.size());
 	matchTexPtrs.resize(sz);
 	for (int i = 0; i <  sz ; ++i) {
 		string fileName = basePath + matchTexList[i];
-		loadByMethod(tex, fileName);
+		tex.loadFromFile(fileName);
 		matchTexs.push_back(tex);
 		matchTexPtrs[i] = &matchTexs[i];
 	}
 }
 
-void State::debugTxtSetup () {
-	
-	loadByMethod(font, "resources/Monaco.ttf");
-	mouseTxt = Text("", font, 13);
+void State::debugTxtSetup ()
+{
+	mouseTxt = Text("", gFont("debug"), 13);
 	mouseTxt.sP(8, 9);
 	mouseTxt.setFillColor(Color::Blue);
 		
-	debugTxt = Text("", font, 13);
+	debugTxt = Text("", gFont("debug"), 13);
 	debugTxt.sP(8, 25);
 	debugTxt.setFillColor(Color::Blue);
 }
 
-void State::onCreate () {
-		
+void State::onCreate ()
+{
 	debugTxtSetup();
 	loadTextures();
 	
 		// background image
 	gameWorldTexs[12].setRepeated(true);
 	bkgd.setTexture(gameWorldTexs[12]);
-	bkgd.setTextureRect(IntRect(0, 0, ScrW * 3, 800));
-	bkgd.setScale(1, 1.15);
+	bkgd.setTextureRect(IntRect(0, 0, 1000 * 3, 800)); // .png is 1000 x 800 px
+	bkgd.setScale(1, scrh / 800);
 	
 	txMap["beachbkgd"].setRepeated(true);
 	
-	bkgdFrame.setTexture(gameWorldTexs[13]);
-	bkgdFrame.sP(-550, -550);
-//	bkgdAlpha.setSize(vecF(ScrW, ScrH));
+//	bkgdAlpha.setSize(vecF(scrw, scrh));
 	bkgdAlpha.setSize({2000, 1200});
 	bkgdAlpha.setFillColor(Color(255, 255, 255, 110));  // alpha: 100 - 130
 	
@@ -229,15 +222,13 @@ void State::onCreate () {
 	
 		//== MENU SETUP == //
 	
-	loadByMethod(titleFont, "resources/Zeriba.otf");
-	loadByMethod(labelFont, "resources/NickelodeonNF.otf");
-	gameTitle.setFont(titleFont);
+	gameTitle.setFont(gFont("title"));
 	gameTitle.setString(String("H O P S C O T C H"));
 	gameTitle.setCharacterSize(150);
 	gameTitle.setOutlineColor(Color(80, 80, 80));
 	gameTitle.setOutlineThickness(5);
 	centerOrigin(gameTitle);
-	gameTitle.sP(ScrCX, 100);
+	gameTitle.sP(scrcx, 120);
 	
 	string str[numButtons];
 	str[0] = "Level 1";
@@ -260,7 +251,7 @@ void State::onCreate () {
 		rects[i].setOutlineThickness(5);
 		rects[i].setOrigin(buttonSize.x / 2., buttonSize.y / 2.);
 		rects[i].setPosition(bp);
-		labels[i].setFont(labelFont);
+		labels[i].setFont(gFont("label"));
 		labels[i].setString(String(str[i]));
 		labels[i].setCharacterSize(36);
 		labels[i].setFillColor(Color(50, 50, 50));
@@ -269,35 +260,25 @@ void State::onCreate () {
 		labels[i].sP(bp);
 		}
 	
-	instrTxt = Text(instrText, labelFont, 30);
+	instrTxt = Text(instrText, gFont("label"), 30);
 	instrTxt.setFillColor(Color::Black);
-	instrTxt.sP(w->mapPixelToCoords(vecI(ScrW - 300,
-										 ScrH - 150)));
+	instrTxt.sP(scrw - 580, scrh - 380);
 	//=========  END MENU   ===========//
 
-	
-	loadByMethod(buffers[0], "resources/startcomputer.wav");
-	sounds[0].setBuffer(buffers[0]);
-	loadByMethod(buffers[1], "resources/doorbell.wav");
-	sounds[1].setBuffer(buffers[1]);
-	loadByMethod(buffers[2], "resources/mysticchimes.wav");
-	sounds[2].setBuffer(buffers[2]);
-	loadByMethod(buffers[3], "resources/phaseJump1.wav");
-	sounds[3].setBuffer(buffers[3]);
-//	loadByMethod(buffers[4], "resources/splash1.wav");
-	buffers[4].loadFromFile("resources/splash1.wav");
-	sounds[4].setBuffer(buffers[4]);
 
-	levels[0] = Level(1, 3, "level1.txt");
-	levels[1] = Level(2, 3, "level2.txt", vecf(ScrCX, ScrCY) + vecf(0, -12));
-	levels[2] = Level(3, 5, "level3.txt", vecf(ScrCX, ScrCY) + vecf(55, 0));
-	levels[3] = Level(4, 3, "level4.txt", {200, 860});
+	levels.push_back(Level(1, 3, "level1.txt", {720, 450}));
+	levels.back().vw = View({0, 0, 1440, 900});
+	levels.push_back(Level(2, 3, "level2.txt", vecf(scrcx, scrcy) + vecf(0, -12)));
+	levels.back().vw = View({0, 0, 1440, 900});
+	levels.push_back(Level(3, 5, "level3.txt", vecf(scrcx, scrcy) + vecf(55, 0)));
+	levels.back().vw = View({0, 0, 1440, 900});
+	levels.push_back(Level(4, 3, "level4.txt", {200, 860}));
 
 	resetForNewLevel();
 } //end onCreate
 
-void State::resetForNewLevel () {
-	
+void State::resetForNewLevel ()
+{
 	if (!curLevel)
 		curLevel = &levels[0];
 	deh.sP(curLevel->dehStart);
@@ -310,41 +291,40 @@ void State::resetForNewLevel () {
 }
 
 
-void State::startLevel (int num) {
-	
-	curLevel = &levels[(num - 1) % numLevels];
+void State::startLevel (int num)
+{
+	curLevel = &levels[(num - 1) % levels.size()];
 	resetForNewLevel();
 	mode = playing;
-	w->setMouseCursorVisible(false);
+	rwin->setMouseCursorVisible(false);
 	
-	//TODO: Level class needs bkgd info
 	bkgd.setTexture(num == 4 ? txMap["beachbkgd"] : gameWorldTexs[12]);
-	bkgd.setTextureRect(IntRect(0, 0, ScrW * 3,
+	bkgd.setTextureRect(IntRect(0, 0, scrw * 3,
 								num == 4 ? bkgd.gLB().height : 800));
-	if (num == 4)
-		bkgd.setScale(1.4, 1.4);
-	else bkgd.setScale(1, 1.15);
+	if (num == 4) {
+		auto factor = scrh / bkgd.gLB().height;
+		bkgd.setScale(factor, factor);
+	}
+	else bkgd.setScale(1, scrh / 800);
 	
-	if (num == 4)
-		gw->setViewToScreen();
-	else gw->setToggledView(gw->isStretched());
+	rwin->setView(curLevel->vw);
 }
 
-void State::newOxyds (int pairs) {
-	
+void State::newOxyds (int pairs)
+{
 	oxydPairs = pairs;
 	oxyds.clear();
-	intvec symsToChoose {};
+	intvec symsToChoose;
+	intvec symsChosen;
 	for (int i = 0; i <  matchTexPtrs.size(); ++i)
 		symsToChoose.push_back(i);
-	intvec symsChosen{};
-	for (int i = 0; i <  pairs; ++i) {
+	for (int i = 0; i < pairs; ++i) {
 		int idx = rand() % symsToChoose.size();
 		symsChosen.push_back(symsToChoose[idx]);
 		symsChosen.push_back(symsToChoose[idx]);
-		popOut(symsToChoose, symsToChoose[idx]);
+		eraseIndex(symsToChoose, idx);
 	}
-	for (int i = 0; i <  pairs * 2; ++i) {
+	for (int i = 0; i < pairs * 2; ++i) {
 		Oxyd ox {};
 		int idx = rand() % symsChosen.size();
 		Texture& matchSymbol = matchTexs[symsChosen[idx]];
@@ -355,36 +335,36 @@ void State::newOxyds (int pairs) {
 	}
 }
 
-void State::onMouseDown (int x, int y) {
-	
+void State::onMouseDown (int x, int y)
+{
 	if (mode == menu)
 		menuClick(x, y);
 	// Currently no clicking in gameplay
 }
 
 
-void State::hitOxyd (Oxyd& ox) {
-	
+void State::hitOxyd (Oxyd& ox)
+{
 	if (ox.isOpen)
 		return;
 	ox.makeOpen(true);
 	if (!checkForMatch(ox)) {
 		if (lastOxyd && !lastOxyd->matched) {
 			lastOxyd->makeOpen(false);
-			sounds[1].play();
+			gSound("openOxydNoMatch").play();
 		}
-		else sounds[0].play();
+		else gSound("openOxyd").play();
 	}
 	else {
-		sounds[2].play();
+		gSound("matchOxyds").play();
 	}
 	if (matchCt == oxydPairs)
 		win();
 	else lastOxyd = &ox;
 }
 
-bool State::checkForMatch (Oxyd& ox) {
-	
+bool State::checkForMatch (Oxyd& ox)
+{
 	if (!lastOxyd)
 		return false;
 	if (ox.myPicture == lastOxyd->myPicture) {
@@ -399,15 +379,14 @@ bool State::checkForMatch (Oxyd& ox) {
 	return false;
 }
 
-void State::die () {
-	
-	sounds[4].play();
+void State::die ()
+{
+	gSound("splash").play();
 	timedMgr->addEventIf("died", 2, [&]() { resetForNewLevel(); });
 }
 
-void State::update (const Time& time) {
-
-		// Separate the logic if we're in the opening menu
+void State::update (const Time& time)
+{
 	if (mode == menu) {
 		menuUpdate();
 		return;
@@ -441,15 +420,14 @@ void State::update (const Time& time) {
 		deh.move(deh.velocity / m);
 		
 			// Handle moving past edges of screen
-		
 		float ob = 15;
 		if (deh.left() < -ob)
 			deh.setLeft(-ob);
-		if (deh.right() > (curLevel->levelID == 4 ? scrw : ScrW) + ob)
-			deh.setRight((curLevel->levelID == 4 ? scrw : ScrW) + ob);
+		if (deh.right() > (scrw + ob))
+			deh.setRight(scrw + ob);
 		if (deh.top() < -ob)
 			deh.setTop(-ob);
-		if (deh.bottom() > (curLevel->levelID == 4 ? scrh : ScrH) + 5 * ob) {
+		if (deh.bottom() > scrh + 5 * ob) {
 			if (!deh.won)
 				die();
 		}
@@ -475,7 +453,7 @@ void State::update (const Time& time) {
 			}
 		}
 		
-		// Check colliding with obstacles and supporting surfaces
+			// Check colliding with obstacles and supporting surfaces
 		for (auto& i : mapItems) {
 			if (!i->isCollidable)
 				continue;
@@ -573,12 +551,14 @@ void State::update (const Time& time) {
 } //end update
 
 
-void State::draw () {
-	
+void State::draw ()
+{
 	if (mode == menu) {
 		menuDraw();
 		return;
 	}
+	
+	auto w = rwin;
 	w->draw(bkgd);
 	w->draw(bkgdAlpha);
 	w->draw(mouseTxt);
@@ -592,12 +572,11 @@ void State::draw () {
 	for (auto& s : stumps)
 		w->draw(s);
 	w->draw(deh);
-	if (!gw->isStretched() && curLevel->levelID != 4)
-		w->draw(bkgdFrame);
 }
 
-void State::menuDraw () {
-	
+void State::menuDraw ()
+{
+	auto w = rwin;
 	w->draw(bkgd);
 	w->draw(gameTitle);
 	for (auto& b : rects)
@@ -605,12 +584,10 @@ void State::menuDraw () {
 	for (auto& b : labels)
 		w->draw(b);
 	w->draw(instrTxt);
-	if (!gw->isStretched())
-		w->draw(bkgdFrame);
 }
 
-void State::menuClick (int x, int y) {
-	
+void State::menuClick (int x, int y)
+{
 	float halfx = buttonSize.x / 2.;
 	float halfy = buttonSize.y / 2.;
 	for (int i = 0; i <  numButtons; ++i) {
@@ -619,23 +596,21 @@ void State::menuClick (int x, int y) {
 				y >= rects[i].getPosition().y - halfy &&
 				y <= rects[i].getPosition().y + halfy) {
 			if (i == numButtons - 1)
-				gw->close();
+				app->close();
 			else startLevel(i + 1);
 			}
 		}
 }
 
-void State::onKeyPress(Keyboard::Key k) {
-	
+void State::onKeyPress(Keyboard::Key k)
+{
 	switch(k) {
 			
 		case Keyboard::Escape:
 			if (mode == menu)
-				gw->close();
-			else {
-				mode = menu;
-				w->setMouseCursorVisible(true);
-			}
+				app->close();
+			else
+				returnToMenu();
 			break;
 						
 		case Keyboard::Y:
@@ -646,8 +621,8 @@ void State::onKeyPress(Keyboard::Key k) {
 	}
 }
 
-void State::onKeyRelease(Keyboard::Key k) {
-	
+void State::onKeyRelease(Keyboard::Key k)
+{
 	switch(k) {
 					
 		default:
@@ -655,8 +630,15 @@ void State::onKeyRelease(Keyboard::Key k) {
 	}
 }
 
-vector<string> State::gameWorldTexList {
-	
+void State::returnToMenu ()
+{
+	mode = menu;
+	rwin->setMouseCursorVisible(true);
+	rwin->setView(rwin->getDefaultView());
+}
+
+vector<string> State::gameWorldTexList
+{
 	"shortplat.png",	// 0
 	"midplat.png",		// 1
 	"longplat.png",		// 2
@@ -700,8 +682,8 @@ const vector<pair<string, string>> State::txList
 	{ "oxyd.png", "oxyd" }
 };
 
-vector<string> State::matchTexList {
-	
+vector<string> State::matchTexList
+{
 	"knight.png",
 	"rook.png",
 	"queen.png",
@@ -726,8 +708,8 @@ vector<string> State::matchTexList {
 	"house.png"
 };
 
-const string State::instrText {
-	
+const string State::instrText
+{	
 	"LEFT / RIGHT to move character \n"
 	"SPACE to jump \n"
 	"F6 to fit graphics to screen \n"

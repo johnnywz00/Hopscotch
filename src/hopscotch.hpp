@@ -1,24 +1,33 @@
+/*
+ - levels list should be input file analogous to ZGolf courses.txt file
+ */
+
+
+
 #ifndef HOPSCOTCH_H
 #define HOPSCOTCH_H
 
+
+#include "vsprite.hpp"
+#include "resourcemanager.hpp"
+#include "timedeventmanager.hpp"
+
+class State;
+
 #include "objects.hpp"
+#include "oxyd.hpp"
+#include "deh.hpp"
 
+class FullscreenOnlyApp;
 
-
-enum GameMode { menu, playing };
-
-class SFGameWindow;
-class TimedEventManager;
-
-class State {
+class State
+{
 public:
-
-	float SCRW () { return w->getView().getSize().x; }
-	float SCRH () { return w->getView().getSize().y; }
-	float SCRCX () { return w->getView().getSize().x / 2; }
-	float SCRCY () { return w->getView().getSize().y / 2; }
+	enum GameMode { menu, playing };
 	
 	void onCreate ();
+	
+	bool handleTextEvent (Event&) { return false; }
 	
 	void loadMap (string fname);
 	
@@ -36,7 +45,7 @@ public:
 	
 	void onMouseDown (int x, int y);
 	
-    void onMouseUp (int x, int y) { }  // May use eventually
+    void onMouseUp (int x, int y) { }
 	
 	void onKeyPress (Keyboard::Key);
     
@@ -57,47 +66,43 @@ public:
 	void menuDraw ();
     
     void menuUpdate () { }  // May add animations
+	
+	void returnToMenu ();
 
-	RenderWindow*  		 w;
-	SFGameWindow* 		 gw;
-    TimedEventManager*         timedMgr;
-    int             	 mx = 0,
-                         my = 0,
-                         mxOld = 0,
-                         myOld = 0;
+	RenderWindow*  		 	rwin;
+	FullscreenOnlyApp* 		app;
+    TimedEventManager*      timedMgr;
+    vecI					mouseVec
+							, oldMouse
+	;
 	
-    vector<Texture>      matchTexs;
-    vector<Texture*>     matchTexPtrs;
-    vector<Texture>      gameWorldTexs;
-  static vector<string>  matchTexList;
-  static vector<string>  gameWorldTexList;
+    vector<Texture>      	matchTexs;
+    vector<Texture*>     	matchTexPtrs;
+    vector<Texture>      	gameWorldTexs;
+    static vector<string>  	matchTexList;
+	static vector<string>  	gameWorldTexList;
 	
-	map<string, Texture> 		txMap;
+	map<string, Texture> 	txMap;
 	static const vector<pair<string, string>>
-								txList;
+							txList;
 
-	vector<Oxyd> 		 oxyds;
-	vector<MapItem> 	 platforms;
-    vector<Stump>        stumps;
-    vector<MapItem*>     mapItems;
+	vector<Oxyd> 		 	oxyds;
+	vector<MapItem> 	 	platforms;
+    vector<Stump>        	stumps;
+    vector<MapItem*>     	mapItems;
     
-    Deh 				 deh;
-    Oxyd* 				 lastOxyd { nullptr };
-	Level* 				 curLevel { nullptr };
-	static constexpr int numLevels = 4;
-	Level 				 levels[numLevels];
-    int 				 matchCt = 0;
-    int 				 oxydPairs = 3;
+    Deh 				 	deh;
+    Oxyd* 				 	lastOxyd = nullptr;
+	Level* 				 	curLevel = nullptr;
+	vector<Level> 			levels;
+    int 				 	matchCt = 0;
+    int 				 	oxydPairs = 3;
 
-    Sprite 				 bkgd,
-                         bkgdFrame;
-    RectangleShape 		 bkgdAlpha;
-    Text                 instrTxt;
-    static const string  instrText;
+	Sprite 				 	bkgd;
+    RectangleShape 		 	bkgdAlpha;
+    Text                 	instrTxt;
+    static const string  	instrText;
 
-    SoundBuffer 		 buffers[6];
-    Sound        		 sounds[6];
-	
 	
 	
 ////////////  MENU SCREEN  /////////////////////
@@ -108,20 +113,14 @@ public:
 	RectangleShape 		 rects[numButtons];
 	Text 				 gameTitle,
 						 labels[numButtons];
-	Font 				 titleFont,
-						 labelFont;
 	vecF 				 buttonSize { 500, 55 };
 	uint 				 buttonPadding { 15 };
-	vecF 				 buttonPos { ScrCX - buttonSize.x / 2 - buttonPadding / 2,
-									 ScrCY - 180 };
+	vecF 				 buttonPos { scrcx - buttonSize.x / 2 - buttonPadding / 2,
+									 scrcy - 160 };
 	
 
-////////////  DEBUG  /////////////////////
-
-	Font    			 font;
 	Text    			 mouseTxt,
 						 debugTxt;
-
 }; //end class State
 
 

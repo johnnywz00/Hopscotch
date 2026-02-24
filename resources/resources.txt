@@ -6,8 +6,14 @@
 
 @fonts
 Monaco.ttf		debug
+Zeriba.otf		title
+NickelodeonNF.otf	label
 
 
 @sounds
-
+startcomputer.wav	openOxyd
+doorbell.wav		openOxydNoMatch
+mysticchimes.wav	matchOxyds
+phaseJump1.wav		jump
+splash1.wav			splash
 
