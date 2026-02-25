@@ -307,10 +307,10 @@ void State::startLevel (int num)
 	bkgd.setTextureRect(IntRect(0, 0, scrw * 3,
 								num == 4 ? bkgd.gLB().height : 800));
 	if (num == 4) {
-		auto factor = scrh / bkgd.gLB().height;
+		auto factor = 1117 / bkgd.gLB().height;
 		bkgd.setScale(factor, factor);
 	}
-	else bkgd.setScale(1, scrh / 800);
+	else bkgd.setScale(1, 900 / bkgd.gLB().height);
 	
 	rwin->setView(curLevel->vw);
 }
@@ -426,13 +426,15 @@ void State::update (const Time& time)
 		
 			// Handle moving past edges of screen
 		float ob = 15;
+		float rightEnd = rwin->getView().getSize().x;
+		float bottomEdge = rwin->getView().getSize().y;
 		if (deh.left() < -ob)
 			deh.setLeft(-ob);
-		if (deh.right() > (scrw + ob))
-			deh.setRight(scrw + ob);
+		if (deh.right() > (rightEnd + ob))
+			deh.setRight(rightEnd + ob);
 		if (deh.top() < -ob)
 			deh.setTop(-ob);
-		if (deh.bottom() > scrh + 5 * ob) {
+		if (deh.bottom() > bottomEdge + 5 * ob) {
 			if (!deh.won)
 				die();
 		}
@@ -641,6 +643,7 @@ void State::returnToMenu ()
 	mode = menu;
 	rwin->setMouseCursorVisible(true);
 	rwin->setView(rwin->getDefaultView());
+	bkgd.setScale(1, scrh / bkgd.gLB().height);
 }
 
 vector<string> State::gameWorldTexList
