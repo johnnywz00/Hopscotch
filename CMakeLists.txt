@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(SfmlApp LANGUAGES CXX)
+project(Hopscotch LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
@@ -27,6 +27,7 @@ FetchContent_Declare(sfml_shared_headers
 FetchContent_MakeAvailable(sfml_shared_headers)
 
 
+
 file(GLOB SOURCES "src/*.cpp" "src/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -37,8 +38,26 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
+
+file(GLOB LEVEDSOURCES "LevelEditor/src/*.cpp" "LevelEditor/src/*.hpp")
+
+add_executable(LevelEditor ${LEVEDSOURCES})
+
+target_compile_features(LevelEditor PRIVATE cxx_std_17)
+
+set_target_properties(LevelEditor PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
+		MACOSX_BUNDLE FALSE
+		INSTALL_RPATH "@executable_path;@executable_path/Frameworks;@executable_path/../Frameworks;;@executable_path/../libs;@executable_path/libs"
+		BUILD_RPATH "@executable_path;@executable_path/Frameworks;@executable_path/../Frameworks;;@executable_path/../libs;@executable_path/libs"
+	)
+
+    set_target_properties(LevelEditor PROPERTIES
 		MACOSX_BUNDLE FALSE
 		INSTALL_RPATH "@executable_path;@executable_path/Frameworks;@executable_path/../Frameworks;;@executable_path/../libs;@executable_path/libs"
 		BUILD_RPATH "@executable_path;@executable_path/Frameworks;@executable_path/../Frameworks;;@executable_path/../libs;@executable_path/libs"
@@ -49,9 +68,19 @@ elseif(UNIX AND NOT APPLE)
         INSTALL_RPATH "$ORIGIN;$ORIGIN/libs"
         BUILD_WITH_INSTALL_RPATH TRUE
     )
+
+    set_target_properties(LevelEditor PROPERTIES
+        INSTALL_RPATH "$ORIGIN;$ORIGIN/libs"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
+	zsprite resource_manager timed_event_manager jwzsfml jwzhpp
+	sfml-audio sfml-graphics sfml-window sfml-system
+)
+
+target_link_libraries(LevelEditor PRIVATE 
 	zsprite resource_manager timed_event_manager jwzsfml jwzhpp
 	sfml-audio sfml-graphics sfml-window sfml-system
 )
@@ -60,6 +89,8 @@ add_custom_target(CopyResources ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
 )
 add_dependencies(${PROJECT_NAME} CopyResources)
+
+add_dependencies(LevelEditor CopyResources)
 
 if(WIN32)
 	if(NOT CMAKE_GENERATOR_PLATFORM)

@@ -660,59 +660,64 @@ vector<string> State::gameWorldTexList
 
 const vector<pair<string, string>> State::txList
 {
-	{ "beachbkgd.png", "beachbkgd" },
-	{ "longbrick.png", "longbrick" },
-	{ "longplat.png", "longplat" },
-	{ "longgrass.png", "longgrass" },
-	{ "midlogplat.png", "midlogplat" },
-	
-	{ "midplat.png", "midplat" },
-	{ "shortgrass.png", "shortgrass" },
-	{ "shortbrick.png", "shortbrick" },
-	{ "shortplat.png", "shortplat" },
-	{ "shortlogplat.png", "shortlogplat" },
-	{ "ornatebracket.png", "ornatebracket" },
-	{ "curvingwood.png", "curvingwood" },
-	{ "doublecurvingwood.png", "doublecurvingwood" },
-	
-	{ "woodcorbel.png", "woodcorbel" },
-	{ "thickpost.png", "thickpost" },
-	{ "thinpost.png", "thinpost" },
-	{ "stump.png", "stump" },
-	{ "oxyd.png", "oxyd" }
+	{ "beachbkgd.png", "beachbkgd" }
+	, { "longbrick.png", "longbrick" }
+	, { "longplat.png", "longplat" }
+	, { "longgrass.png", "longgrass" }
+	, { "midlogplat.png", "midlogplat" }
+
+	, { "midplat.png", "midplat" }
+	, { "shortgrass.png", "shortgrass" }
+	, { "shortbrick.png", "shortbrick" }
+	, { "shortplat.png", "shortplat" }
+	, { "shortlogplat.png", "shortlogplat" }
+	, { "ornatebracket.png", "ornatebracket" }
+	, { "curvingwood.png", "curvingwood" }
+	, { "doublecurvingwood.png", "doublecurvingwood" }
+
+	, { "woodcorbel.png", "woodcorbel" }
+	, { "thickpost.png", "thickpost" }
+	, { "thinpost.png", "thinpost" }
+	, { "stump.png", "stump" }
+	, { "oxyd.png", "oxyd" }
 };
 
 vector<string> State::matchTexList
 {
-	"knight.png",
-	"rook.png",
-	"queen.png",
-	"king.png",
-	"bishop.png",
-	"leta.png",
-	"letb.png",
-	"letc.png",
-	"starfish.png",
-	"wheel.png",
-	"ball.png",
-	"sheep.png",
-	"leth.png",
-	"letk.png",
-	"letm.png",
-	"letx.png",
-	"matchorca.png",
-	"matchdeh.png",
-	"moon.png",
-	"squish.png",
-	"bull.png",
-	"house.png"
+	"knight.png"
+	, "rook.png"
+	, "queen.png"
+	, "king.png"
+	, "bishop.png"
+	, "leta.png"
+	, "letb.png"
+	, "letc.png"
+	, "starfish.png"
+	, "wheel.png"
+	, "ball.png"
+	, "sheep.png"
+	, "leth.png"
+	, "letk.png"
+	, "letm.png"
+	, "letx.png"
+	, "matchorca.png"
+	, "matchdeh.png"
+	, "moon.png"
+	, "squish.png"
+	, "bull.png"
+	, "house.png"
+	, "soccerball.png"
+	, "pinkballoon.png"
+	, "yellowballoon.png"
+	, "greenballoon.png"
+	, "blueballoon.png"
+	, "flowers.png"
 };
 
 const string State::instrText
 {	
 	"LEFT / RIGHT to move character \n"
 	"SPACE to jump \n"
-	"F6 to fit graphics to screen \n"
 	"ESC to return to menu \n"
 	"Match the \"oxyds\"! \n"
 };

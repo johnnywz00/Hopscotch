@@ -80,6 +80,7 @@ void State::makeMap ()
 				endl;
 	}
 	fs.close();
+	gSound("openOxyd").play();
 }
 
 
@@ -243,7 +244,7 @@ void State::deselectAll()
 			
 void State::debugTxtSetup() {
 
-	if (!font.loadFromFile((Resources::executingDir() / "resources" / "Monaco.ttf").string()))
+	if (!font.loadFromFile((Resources::executingDir() / "resources" / "fonts" / "Monaco.ttf").string()))
 		cerr << "Couldn't load font";
 	mouseTxt = Text("", font, 13);
 	mouseTxt.sP(8, 8);
@@ -272,7 +273,7 @@ void State::loadTextures() {
 
 void State::loadItemButtons() {
 
-	string basePath = (Resources::executingDir() / "resources" / "").string();
+	string basePath = (Resources::executingDir() / "resources" / "images" / "").string();
 	Texture tex;
 	forNum (int(mapItemImgList.size())) {
 		string fileName = mapItemImgList[i];

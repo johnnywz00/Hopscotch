@@ -21,13 +21,7 @@ void SFGameWindow::setup (const string& title, const vecU& size) {
 	_isDone = false;
 	_isFocused = true;
 	create();
-	//	if (!loadByMethod(icon, iconPath)) {
-	if (!icon.loadFromFile(iconPath)) {
-		cerr << "Couldn\'t load icon! \n";
-	}
-	else
-		window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	}
+}
 
 void SFGameWindow::create () {
 	
@@ -153,12 +147,19 @@ void Game::update () {
 
 
 
-int main () {
+int main (int argc, char* argv[])
+{
+
+#ifdef DEBUG
+	Image img;
+	if (!img.loadFromFile("resources/images/stump.png")) {
+		cerr << "DEBUG preprocessor symbol is defined, but icon.png can't be found through relative path.\n";
+		return EXIT_FAILURE;
+	}
+#endif
 	
-    Image img;
-	if (!img.loadFromFile(iconPath))
-        return EXIT_FAILURE;
-    
+	cout << "Initializing Resources\n";
+	Resources::initialize(argc, argv);
 
     Game game;
     while (!game.getWindow()->isDone()) {

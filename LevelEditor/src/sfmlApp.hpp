@@ -14,7 +14,7 @@
 #include "timedeventmanager.hpp"
 
 inline const string defaultTitle { "Level Editor" };
-inline const string iconPath { "resources/stump.png" };
+inline const string iconPath { (Resources::executingDir() / "resources" / "images" / "stump.png").string() };
 
 
 class SFGameWindow {
