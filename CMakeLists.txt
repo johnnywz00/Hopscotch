@@ -165,3 +165,14 @@ elseif(UNIX AND NOT APPLE)
         VERBATIM
     )
 endif()
+
+add_custom_command(
+	TARGET ${PROJECT_NAME}
+	POST_BUILD
+
+	COMMAND ${CMAKE_COMMAND} -E copy
+		"${CMAKE_SOURCE_DIR}/Level Editor Instructions.txt"
+		$<TARGET_FILE_DIR:${PROJECT_NAME}>
+
+	VERBATIM
+)

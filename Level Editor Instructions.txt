@@ -1,0 +1,20 @@
+
+Esc  =  quit
+Y  =  saves current editor to resources/levels/level.txt (quit program and rename the file after completing it so additional uses don't overwrite it)
+
+A/Shift + A  =  moves a selected element forward or backward in the layers
+;  =  elongates cursor's height (such as a post)
+P  =  shortens cursor element
+[  =  narrows cursor element
+]  =  widens cursor element
+,  =  rotates cursor element counterclockwise
+.  =  " " clockwise
+/  =  shrinks cursor proportionally
+(Apostrophe)  =  enlarges cursor proportionally
+\  =  flips cursor sprite horizontally
+Shift + Backslash  =  flips cursor sprite vertically
+
+Shift + Comma  =  returns cursor sprite to original rotation
+Shift + Slash  =  returns cursor sprite to original scale
+
+- Placed items can be click selected and dragged as a group
