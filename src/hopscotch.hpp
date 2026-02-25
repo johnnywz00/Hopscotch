@@ -109,13 +109,15 @@ public:
 
 	static constexpr int numButtons = 5;
 
-	GameMode 			 mode = menu;
-	RectangleShape 		 rects[numButtons];
-	Text 				 gameTitle,
-						 labels[numButtons];
-	vecF 				 buttonSize { 500, 55 };
-	uint 				 buttonPadding { 15 };
-	vecF 				 buttonPos { scrcx - buttonSize.x / 2 - buttonPadding / 2,
+	GameMode 			mode = menu;
+	RectangleShape 		rects[numButtons];
+	Text 				gameTitle
+						, signatureTxt
+						, labels[numButtons]
+	;
+	vecF 				buttonSize { 500, 55 };
+	uint 				buttonPadding { 15 };
+	vecF 				buttonPos { scrcx - buttonSize.x / 2 - buttonPadding / 2,
 									 scrcy - 160 };
 	
 

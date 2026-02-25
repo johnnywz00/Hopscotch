@@ -263,6 +263,11 @@ void State::onCreate ()
 	instrTxt = Text(instrText, gFont("label"), 30);
 	instrTxt.setFillColor(Color::Black);
 	instrTxt.sP(scrw - 580, scrh - 380);
+	
+	signatureTxt = Text("John Ziegler, 2020   johnnywz00@yahoo.com", gFont("label"), 18);
+	signatureTxt.setFillColor(Color(0, 0, 0, 130));
+	centerOrigin(signatureTxt);
+	signatureTxt.setPosition(scrcx, scrh - 27);
 	//=========  END MENU   ===========//
 
 
@@ -584,6 +589,7 @@ void State::menuDraw ()
 	for (auto& b : labels)
 		w->draw(b);
 	w->draw(instrTxt);
+	w->draw(signatureTxt);
 }
 
 void State::menuClick (int x, int y)
