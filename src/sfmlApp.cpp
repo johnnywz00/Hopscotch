@@ -113,10 +113,10 @@ int main (int argc, char* argv[])
 
 	FullscreenOnlyApp app;
 	
-	cout << "Preparing to launch game loop for 3DModel\n";
+	cout << "Preparing to launch game loop for Hopscotch\n";
 	try {
 		app.run();
-		cout << "Exited 3DModel loop\n";
+		cout << "Exited Hopscotch loop\n";
 	}
 	catch (std::runtime_error& e) {
 		cerr << "Caught runtime exception: " << e.what() << endl;
