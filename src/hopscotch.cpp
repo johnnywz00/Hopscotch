@@ -435,7 +435,7 @@ void State::update (const Time& time)
 		if (deh.top() < -ob)
 			deh.setTop(-ob);
 		if (deh.bottom() > bottomEdge + 5 * ob) {
-			if (!deh.won)
+			if (!deh.won && !timedMgr->isTagActive("died"))
 				die();
 		}
 		
